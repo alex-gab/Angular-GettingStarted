@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { IProduct } from "./product";
 
 @Component({
@@ -6,12 +6,14 @@ import { IProduct } from "./product";
   templateUrl: "./product-list.component.html",
   styleUrls: ["./product-list.component.css"]
 })
-export class ProductListComponent {
+export class ProductListComponent implements OnInit {
   pagetTitle: string = "Product List";
   imageWidth: number = 50;
   imageMargin: number = 2;
   showImage: boolean = false;
-  listFilter: string = "cart";
+  private _listFilter: string = "";
+
+  filteredProducts: IProduct[] = [];
   products: IProduct[] = [
     {
       "productId": 2,
@@ -35,7 +37,26 @@ export class ProductListComponent {
     }
   ];
 
+  ngOnInit(): void {
+    this.listFilter = "cart";
+  }
+
   toggleImage() : void {
     this.showImage = !this.showImage;
+  }
+
+  get listFilter(): string {
+    return this._listFilter;
+  }
+  
+  set listFilter(value : string) {
+    this._listFilter = value;
+    console.log("In setter: ", value);
+    this.filteredProducts = this.performFilter(value);
+  }
+
+  performFilter(filterBy: string): IProduct[] {
+    filterBy = filterBy.toLowerCase();
+    return this.products.filter(product => product.productName.toLowerCase().includes(filterBy));
   }
 }
