@@ -59,4 +59,8 @@ export class ProductListComponent implements OnInit {
     filterBy = filterBy.toLowerCase();
     return this.products.filter(product => product.productName.toLowerCase().includes(filterBy));
   }
+
+  onRatingClicked(message: string): void {
+    this.pagetTitle = "Product List: " + message;
+  }
 }
